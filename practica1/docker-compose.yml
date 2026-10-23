@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  servidor:
+    image: osixia/openldap:latest
+    container_name: ldap.securecorp.local
+    hostname: ldap.securecorp.local
+    networks:
+      - securecorp_network
+    ports:
+      - "389:389"
+      - "636:636"
+    volumes:
+      - ./pki:/pki
+      - ./ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom
+    environment:
+      - LDAP_ORGANISATION=SecureCorp
+      - LDAP_DOMAIN=securecorp.local
+      - LDAP_ADMIN_PASSWORD=admin
+      - LDAP_TLS_VERIFY_CLIENT=try
+
+  cliente:
+    image: ubuntu:22.04
+    container_name: cliente.securecorp.local
+    hostname: cliente.securecorp.local
+    networks:
+      - securecorp_network
+    volumes:
+      - ./pki:/pki
+    command: tail -f /dev/null
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin.securecorp.local
+    hostname: phpldapadmin.securecorp.local
+    networks:
+      - securecorp_network
+    ports:
+      - "6443:443"
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=ldap.securecorp.local
+      - PHPLDAPADMIN_HTTPS=true
+    depends_on:
+      - servidor
+
+  web:
+    build: ./web
+    container_name: web.securecorp.local
+    hostname: web.securecorp.local
+    networks:
+      - securecorp_network
+    ports:
+      - "8081:80"
+    volumes:
+      - ./pki:/pki
+    depends_on:
+      - servidor
+
+networks:
+  securecorp_network:
+    driver: bridge
