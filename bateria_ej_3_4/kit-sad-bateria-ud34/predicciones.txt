@@ -3,6 +3,9 @@
 443= closed
 8080= filtered
 
+El DNAT publica los puertos 80 y 443
+La web no escucha en el 443 
+
 
 
 
