@@ -9,6 +9,20 @@ Desde la calle: `./lab.sh cliente` y dentro `nmap -Pn -p 22,80,443,5432,8080 198
 ```text
 (pega aquí la salida de nmap)
 ```
+root@cliente:/#  nmap -Pn -p 22,80,443,5432,8080 198.51.100.254
+Starting Nmap 7.95 ( https://nmap.org ) at 2026-11-18 18:55 UTC
+Nmap scan report for sad-p2-fw.sad-p2_calle (198.51.100.254)
+Host is up (0.000096s latency).
+
+PORT     STATE    SERVICE
+22/tcp   filtered ssh
+80/tcp   open     http
+443/tcp  open     https
+5432/tcp filtered postgresql
+8080/tcp filtered http-proxy
+MAC Address: 5A:83:2F:25:22:37 (Unknown)
+
+Nmap done: 1 IP address (1 host up) scanned in 1.40 seconds
 
 ## Bloque A · El contador
 
